@@ -269,6 +269,42 @@
             opacity: 0.85;
         }
 
+        .email-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .email-text {
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text);
+            user-select: all;
+        }
+
+        .copy-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--green);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--border);
+        }
+
+        .copy-btn.copied {
+            color: var(--text-secondary);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -437,8 +473,25 @@
             <h3>Need Help?</h3>
             <p>If you're experiencing issues, have questions, or want to provide feedback, we'd love to hear from you.</p>
             <a href="mailto:guohanqing93@gmail.com" class="support-email">Contact Support</a>
+            <div class="email-display">
+                <span class="email-text">guohanqing93@gmail.com</span>
+                <button class="copy-btn" onclick="copyEmail(this)">Copy</button>
+            </div>
         </div>
     </section>
+
+    <script>
+        function copyEmail(btn) {
+            navigator.clipboard.writeText('guohanqing93@gmail.com').then(function() {
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(function() {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
 
     <!-- Footer -->
     <footer>
