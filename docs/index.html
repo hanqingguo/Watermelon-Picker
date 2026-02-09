@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermelon Picker - AI Watermelon Analysis</title>
+    <meta name="description" content="Watermelon Picker uses AI to analyze watermelons, predict taste, and help you pick the sweetest one every time.">
+    <link rel="icon" type="image/png" href="icon.png">
+    <style>
+        :root {
+            --green: #34C759;
+            --green-dark: #248A3D;
+            --blue: #007AFF;
+            --purple: #AF52DE;
+            --pink: #FF2D55;
+            --bg: #FAFAFA;
+            --card: #FFFFFF;
+            --text: #1D1D1F;
+            --text-secondary: #86868B;
+            --border: #E5E5EA;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000000;
+                --card: #1C1C1E;
+                --text: #F5F5F7;
+                --text-secondary: #98989D;
+                --border: #38383A;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(250, 250, 250, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 12px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            nav { background: rgba(0, 0, 0, 0.8); }
+        }
+
+        .nav-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+        .nav-brand img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--green);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            box-shadow: 0 8px 32px rgba(52, 199, 89, 0.2);
+            margin-bottom: 32px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 32px;
+        }
+
+        .badge {
+            display: inline-block;
+        }
+
+        .badge img {
+            height: 54px;
+        }
+
+        /* Features */
+        .features {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Sections */
+        .section {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .section h2 {
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        /* FAQ */
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-item h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .faq-item p {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Support */
+        .support-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .support-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .support-card p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .support-email {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--green), var(--blue));
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .support-email:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--green);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 17px; }
+            .section h2 { font-size: 28px; }
+            .nav-links { gap: 16px; }
+            .nav-links a { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <img src="icon.png" alt="Watermelon Picker">
+                Watermelon Picker
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <img src="icon.png" alt="Watermelon Picker" class="hero-icon">
+        <h1>Watermelon Picker</h1>
+        <p>AI-powered watermelon analysis. Take a photo, get visual quality scores, knock sound analysis, and taste predictions to find the sweetest pick.</p>
+        <!-- Uncomment when you have your App Store link -->
+        <!-- <a href="https://apps.apple.com/app/idYOUR_APP_ID" class="badge">
+            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store">
+        </a> -->
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(52,199,89,0.12);">
+                <span>&#128065;</span>
+            </div>
+            <h3>Visual Analysis</h3>
+            <p>AI examines field spot color, stripe contrast, shape uniformity, and rind texture to score each watermelon's visual quality.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(175,82,222,0.12);">
+                <span>&#127925;</span>
+            </div>
+            <h3>Knock Sound Analysis</h3>
+            <p>Record a knock on the watermelon. The app analyzes the sound resonance, pitch, and hollowness to gauge ripeness.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(255,45,85,0.12);">
+                <span>&#127817;</span>
+            </div>
+            <h3>Taste Prediction</h3>
+            <p>Combines visual and sound data to predict sweetness, juiciness, texture, and crunch so you can pick the best one.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(0,122,255,0.12);">
+                <span>&#127942;</span>
+            </div>
+            <h3>Smart Ranking</h3>
+            <p>When multiple watermelons are in frame, the app ranks them from best to least recommended so you know exactly which to buy.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(255,159,10,0.12);">
+                <span>&#128247;</span>
+            </div>
+            <h3>One-Tap Scan</h3>
+            <p>Just take a photo. The AI automatically detects every watermelon and delivers analysis in seconds. No manual setup needed.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(52,199,89,0.12);">
+                <span>&#128274;</span>
+            </div>
+            <h3>Privacy First</h3>
+            <p>Photos are analyzed and never stored. No accounts required. Your data stays on your device.</p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <h4>How does it work?</h4>
+            <p>Take a photo of one or more watermelons. The app uses AI to detect each watermelon, analyze visual markers (field spot, stripes, shape, texture), and predict quality. You can optionally record a knock sound for even more accurate taste predictions.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>How many free credits do I get?</h4>
+            <p>Every new user receives 3 free analysis credits. Each credit allows you to analyze one photo. If no watermelons are detected in your photo, the credit is refunded automatically.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>How do I get more credits?</h4>
+            <p>You can purchase additional credits directly in the app. We offer a 10-credit pack and a 100-credit pack. Go to Settings &gt; Buy More Credits to purchase.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Do credits expire?</h4>
+            <p>No. Credits never expire and persist on your device even if you reinstall the app.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Do I need an account?</h4>
+            <p>No. Watermelon Picker works without any account, login, or sign-up. Everything is stored locally on your device.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Is my data private?</h4>
+            <p>Yes. Photos are sent to our AI for analysis but are never stored or shared. We do not collect personal information. See our <a href="privacy.html" style="color: var(--green);">Privacy Policy</a> for full details.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>What devices are supported?</h4>
+            <p>Watermelon Picker requires an iPhone running iOS 18.0 or later.</p>
+        </div>
+
+        <div class="faq-item">
+            <h4>Can I restore my purchases?</h4>
+            <p>Credits are consumable purchases tied to your device. You can tap "Restore Purchases" in the purchase screen to process any pending transactions. Note that consumed credits cannot be restored as they are one-time use.</p>
+        </div>
+    </section>
+
+    <hr class="section-divider">
+
+    <!-- Support -->
+    <section class="section" id="support">
+        <h2>Support</h2>
+        <div class="support-card">
+            <h3>Need Help?</h3>
+            <p>If you're experiencing issues, have questions, or want to provide feedback, we'd love to hear from you.</p>
+            <a href="mailto:guohanqing93@gmail.com" class="support-email">Contact Support</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="#support">Support</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <p>&copy; 2026 Watermelon Picker. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
